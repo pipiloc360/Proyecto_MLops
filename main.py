@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import pandas as pd 
 import unicodedata as uni
 from fastapi.encoders import jsonable_encoder
-
+from unidecode import unidecode
 
 
 app = FastAPI(title="Información de películas")
@@ -36,17 +36,16 @@ def cantidad_filmaciones(x: str):
 def cantidad_filmaciones_dia(dia: str):
     """"
     Esta función recibe como parámetro un día en español y devuelve el número
-    de películas estrenadas en ese dia
+    de películas estrenadas en ese día
     x = string del día en español
-    return = entero numero de películas
+    return = entero número de películas
     """
-    import unicodedata as uni
-    dias = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"]
+    dias = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
     dia = dia.lower()
-    dia = uni.normalize('NFKD', dia).encode('ASCII', 'ignore').decode('utf-8')
+    dia = unidecode(dia)
     if dia in dias:
-        total_films = pd.DataFrame({"dia":df["release_date"].dt.day_name(locale="es_ES")})
-        total_films['dia'] = total_films['dia'].apply(lambda x: uni.normalize('NFKD', x).encode('ASCII', 'ignore').decode('utf-8').lower())
+        total_films = pd.DataFrame({"dia": df["release_date"].dt.day_name(locale="es_ES")})
+        total_films['dia'] = total_films['dia'].apply(lambda x: unidecode(x.lower()))
         total = total_films[total_films['dia'] == dia]
         total_final = total.shape[0]
         return {"dia": dia, "cantidad": total_final}
