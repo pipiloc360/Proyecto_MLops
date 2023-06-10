@@ -44,7 +44,7 @@ def cantidad_filmaciones_dia(dia: str):
     dia = dia.lower()
     dia = unidecode(dia)
     if dia in dias:
-        total_films = pd.DataFrame({"dia": df["release_date"].dt.day_name(locale="es_ES")})
+        total_films = pd.DataFrame({"dia": df["release_date"].dt.day_name()})
         total_films['dia'] = total_films['dia'].apply(lambda x: unidecode(x.lower()))
         total = total_films[total_films['dia'] == dia]
         total_final = total.shape[0]
