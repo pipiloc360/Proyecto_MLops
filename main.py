@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import pandas as pd 
 import unicodedata as uni
+from fastapi.encoders import jsonable_encoder
 
 
 
@@ -19,6 +20,7 @@ def cantidad_filmaciones(x: str):
     x = Recibe como argumentos un string con el nombre del mes en español
     return = devuelve el número de películas que se estrenaron en ese mes
     """
+    y = x
     x = x.lower() 
     months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"] 
     if x in months:
@@ -28,7 +30,7 @@ def cantidad_filmaciones(x: str):
     
     total_films = df[df['release_date'].dt.month == x]
     total = total_films.shape[0]
-    return {"mes": x, "cantidad": total}
+    return {"mes": y, "cantidad": total}
 
 @app.get('/cantidad_filmaciones_dia')
 def cantidad_filmaciones_dia(dia: str):
@@ -52,18 +54,18 @@ def cantidad_filmaciones_dia(dia: str):
         print("El día ingresado no es válido")
 
 @app.get('/score_titulo')
-def score_titulo(titulo: str):
+def score_titulo(nombre: str):
     """""
     Esta función recibe un string del nombre de una película y devuelve un string indicando 
     el año en que fue estrenada, y su popularidad
     """
-    titulo = titulo.lower()
-    if titulo in df["title"].str.lower().values:
-        year = df.loc[df["title"].str.lower() == titulo, "release_year"].values[0]
-        score = df.loc[df["title"].str.lower() == titulo, "popularity"].values[0]
-        return {"titulo": titulo, "anio": year, "popularidad": score}
+    nombre = nombre.lower()
+    if nombre in df["title"].str.lower().values:
+        year = df.loc[df["title"].str.lower() == nombre, "release_year"].values[0]
+        score = df.loc[df["title"].str.lower() == nombre, "popularity"].values[0]
+        return jsonable_encoder({"titulo": nombre, "anio": int(year), "popularidad": float(score)})
     else:
-        print("El título no es válido o no se encuentra en la base de datos")
+        return None
 
 @app.get('/votos_titulo')
 def votos_titulo(titulo):
@@ -77,7 +79,7 @@ def votos_titulo(titulo):
         votes = df.loc[df["title"].str.lower() == titulo, "vote_count"].values[0]
         average = df.loc[df["title"].str.lower() == titulo, "vote_average"].values[0]
         if votes >= 2000:
-            return {'titulo':titulo, 'anio':year, 'voto_total':votes, 'voto_promedio':average}
+            return {'titulo':titulo, 'anio':int(year), 'voto_total':float(votes), 'voto_promedio':float(average)}
         else:
             return print("La película no tiene al menos 2000 votos")
 
