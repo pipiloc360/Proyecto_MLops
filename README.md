@@ -17,5 +17,25 @@ Las librerías a utilizar son:
 ### Extracción:
 Para el proceso de extracción se utilizaron los archivos llamados credits.csv y movies_dataset.csv
 En primer lugar mediante Python se realizó la carga del archivo movies_dataset.csv y credits.csv en formato DataFrame 
+**REVISAR EL ARCHIVO "ETL.csv" EN EL SE ENCUENTRA TODO EL PROCESO DE EXTRACCIÓN EXPLICADO
 ### Transformación
+Una vez cargada la información en Dataframes se procede a limpiar en primer lugar el archivo movies_dataset.csv haciendo las siguientes transformaciones:
+- Filtro de valores nulos
+- Eliminación de columnas sin importancia
+- Cambio a formato fecha a las columnas requeridas
+- Desanidar y seleccionar la información relevante pesente en los diccionarios de algunas columnas
+- Calculo de columnas como Return y Anio
+- Exportar el nuevo datframe limpio
+En segundo lugar se procede a limpiar el archivo credits.csv con las siguientes transformaciones:
+- Revisión de valores nulos
+- Desanidar y seleccionar información relevantes de la columna cast y crew, en este caso solo se necesitan el nombre de los acotres y directores
+- Eliminar columnas anidadas
+- Exportar el nuevo datframe
+Finalmente por medio del Id de cada película se unos los dos Datframes limpios
+###Carga
+La carga de los datos se realizó mediante la exportación del datframe final_limpio.csv y su sincronización con la carpeta Proyecto_MLops en github
+**Este proceso se explica de manera más profunda en la creación de la API**
+
+
+
 
