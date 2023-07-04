@@ -14,8 +14,81 @@ async def load_dataframe():
     global df
     df = pd.read_csv("final_clean.csv", parse_dates=['release_date'], date_parser=lambda x: pd.to_datetime(x, format='%Y-%m-%d'))
 
-@app.get('/cantidad_filmaciones')
-def cantidad_filmaciones(x: str): 
+@app.get('/peliculas_idioma')
+def peliculas_idioma(idioma: str):
+    """
+    Se ingresa un idioma (como están escritos en el dataset, no hay que traducirlos!). 
+    Debe devolver la cantidad de películas producidas en ese idioma.
+    """
+    idioma = idioma.capitalize()
+    total_films = df[df['name_language'] == idioma]
+    total = total_films.shape[0]
+    return {"Idioma": idioma, "cantidad": total}
+@app.get('/peliculas_duración')
+def peliculas_duración(pelicula:str):
+    """
+    Se ingresa una pelicula. Debe devolver la la duracion y el año.
+    """
+    pelicula = pelicula.lower()
+    if pelicula in df["title"].str.lower().values:
+        year = df.loc[df["title"].str.lower() == pelicula, "release_year"].values[0]
+        duration = df.loc[df["title"].str.lower() == pelicula, "runtime"].values[0]
+        return jsonable_encoder({"titulo": pelicula, "anio": int(year), "duración": float(duration)})
+    else:
+        return None
+@app.get('/franquicia')
+def franquicia(franquicia:str):
+    """
+    Se ingresa la franquicia, retornando la cantidad de peliculas, ganancia total y promedio
+    """
+    df["name_collec"] = df["name_collec"].fillna("")
+    reveneu = []
+    peliculas = []
+    for index, row in df.iterrows():
+        if franquicia in row["name_collec"]:
+            peliculas.append(row['title'])
+            reveneu.append(row["revenue"])
+        else: 
+            continue 
+    new_retorno = [valor for valor in reveneu if valor != 0]
+    reveneu_final = sum(new_retorno)
+    if len(peliculas) > 1:
+        return {'Franquicia':franquicia, 'cantidad_filmaciones':len(peliculas), 'Ganancia Total':reveneu_final}
+    else: 
+        return print("Franquicia sin registros")
+
+@app.get('/peliculas_pais')
+def peliculas_pais(pais:str):
+    """
+    Se ingresa un país (como están escritos en el dataset, no hay que traducirlos!), 
+    retornando la cantidad de peliculas producidas en el mismo.
+    """
+    total_films = df[df['name_country'] == pais]
+    total = total_films.shape[0]
+    return {"País": pais, "cantidad": total}
+
+@app.get('/productora')
+def productora(productora:str):
+    """
+   Se ingresa la productora, entregandote el revunue total y la cantidad de peliculas que realizo.
+    """
+    retorno = []
+    peliculas = []
+    for index, row in df.iterrows():
+        if productora in row["productor"]:
+            peliculas.append(row['title'])
+            retorno.append(row["return"])
+        else: 
+            continue 
+    new_retorno = [valor for valor in retorno if valor != 0]
+    retorno_final = sum(new_retorno)
+    if len(peliculas) > 1:
+        return {'Productora':productora, 'cantidad_filmaciones':len(peliculas), 'retorno_total':retorno_final}
+    else: 
+        return print("Productora sin registros")
+    
+@app.get('/cantidad_filmaciones_mes')
+def cantidad_filmaciones_mes(x: str): 
     """"
     x = Recibe como argumentos un string con el nombre del mes en español
     return = devuelve el número de películas que se estrenaron en ese mes
@@ -48,7 +121,7 @@ def cantidad_filmaciones_dia(dia: str):
         total_films['dia'] = total_films['dia'].apply(lambda x: unidecode(x.lower()))
         total = total_films[total_films['dia'] == dia]
         total_final = total.shape[0]
-        return {"dia": dia, "cantidad": total_final}
+        return {"dia": dia, "cantidad": int(total_final)}
     else:
         print("El día ingresado no es válido")
 
