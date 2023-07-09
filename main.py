@@ -3,16 +3,27 @@ import pandas as pd
 import unicodedata as uni
 from fastapi.encoders import jsonable_encoder
 from unidecode import unidecode
-
+from sklearn.neighbors import NearestNeighbors
 
 app = FastAPI(title="Información de películas")
+
 
 #http://127.0.0.1:8000
 
 @app.on_event("startup")
 async def load_dataframe():
     global df
+    global df_codificado
+    global knn
+    global X
+    global k
     df = pd.read_csv("final_clean.csv", parse_dates=['release_date'], date_parser=lambda x: pd.to_datetime(x, format='%Y-%m-%d'))
+    df_codificado = pd.read_csv("Codificado.csv")
+    caracteristicas = df_codificado.columns.to_list()
+    X = df_codificado[caracteristicas].values
+    k = 5
+    knn = NearestNeighbors(n_neighbors=k)
+    knn.fit(X)
 
 @app.get('/peliculas_idioma')
 def peliculas_idioma(idioma: str):
@@ -218,3 +229,16 @@ def get_director(nombre_director):
     else: 
         print("Director sin registros")
         return None
+
+@app.get('/recomendacion')
+def recomendacion(titulo):
+    # Obtener el índice de la película dada
+    indice_pelicula = df[df['title'] == titulo].index[0]
+
+    # Obtener los vecinos más cercanos a la película dada
+    _, indices_vecinos = knn.kneighbors(X[indice_pelicula].reshape(1, -1))
+
+    # Obtener los títulos de las películas vecinas
+    peliculas_recomendadas = df.iloc[indices_vecinos[0]]['title'].tolist()
+
+    return {"Películas recomendadas": peliculas_recomendadas[:5] }
