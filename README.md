@@ -48,6 +48,9 @@ Finalmente para que la API pueda ser consumida por más personas, se realiza un 
 repositorio y su deploy
 ### **LINK DE ACCESO AL DEPLOYMENT**
 https://proyecto-individual-1-ue6k.onrender.com/docs
+## Sistema de recomendación
+### Pronceso de EDA
+En primer cargamos el archivo final_clean.csv para hacer el EDA
 
 
 
