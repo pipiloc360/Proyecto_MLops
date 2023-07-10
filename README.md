@@ -50,7 +50,10 @@ repositorio y su deploy
 https://proyecto-individual-1-ue6k.onrender.com/docs
 ## Sistema de recomendación
 ### Pronceso de EDA
-En primer cargamos el archivo final_clean.csv para hacer el EDA
+En primer cargamos el archivo final_clean.csv para hacer el EDA.
+Seguido con la Librería ydata-profiling hacemos el análisis paso por paso:
+1. Eliminamos columnas con muchos zeros no importantes y aquellas con muchos valores nulos:
+   ![Valores faltantes](img/Missing_Values.png "Valores Faltantes")
 
 
 
