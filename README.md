@@ -52,12 +52,26 @@ https://proyecto-individual-1-ue6k.onrender.com/docs
 ### Pronceso de EDA
 En primer cargamos el archivo final_clean.csv para hacer el EDA.
 Seguido con la Librería ydata-profiling hacemos el análisis paso por paso:
-1. Eliminamos columnas con muchos zeros no importantes y aquellas con muchos valores nulos:
-   ![Valores faltantes](img/Missing_Values.png "Valores Faltantes")
-
-
-
-
-
-
-
+1. Eliminamos columnas con muchos zeros no importantes y aquellas con muchos valores nulos: <br>
+   Valores faltantes (entre más blanco más valores faltantes)
+   ![Missin Values](img/Missing_Values.png "Valores Faltantes")
+   Valores zero
+   ![zero](img/zeros.png "Zeros")
+2. Nos centramos en las columnas que usaremos para el sistema de recomendación, en primer lugar la que tiene nombre "popularity" que se refiere a la popularidad de la película
+- El reporte nos menciona que tiene un sesgo muy grande hacia la derecha, es decir, que tiene una cola muy acentuada en este sentido, lo que nos da a entenderque los valores de popularidad se encuentran muchos en un rango pequeño y unos pocos se salen demsiado del rango en sentido positivo <br>
+Coeficiente de asimetría de "popularity" <br>
+![sesgo](img/skewed_popu.png "sesgo") <br>
+Percentil 95 se encuentra en 11.0 6<br>
+![sesgo](img/Estadistic_popu.png "sesgo") <br>
+Histograma de frecuencias de popularidad <br>
+![histograma](img/Histo_popu.png "histograma") <br>
+Con base en la información podemos decir que la mayoría de películas cuentan con una popularidad similar, alreddor del 95% de las películas tienen una popularidad de 11 o menos, sin embargo el otro 5% tiene una popularidad muchísimo mayor, con valores por encima de 20 llegando a 517 como máximo (es probable que el sistema de recomendación se centre en aquellas con valores de 11 o menos)
+3. Análisis de la columna "vote_average"
+  - El reporte nos muestra que existen muchos votos promedio con un valor de 0 (2945 en total) , lo cual es extraño debido que una película diicilmente consigue una calificación tan baja <br>
+  Informe e histograma de frecuencia de vote_average
+    ![histograma](img/Histo_vote.png "histograma") <br
+  - Se observa que hay na columna llamada vote_count, por lo que una posible causa de que hayan películas con puntuación 0 es que no tienen votos, por lo que se procede a verficiar esto <br>
+  Filtrado de vote_average = 0 por vote_count = 0 <br>
+  ![filtrado](img/Info_vote.png "filtrado") 
+Se observa que 2847 de películas con vote_average 0 se debe a que no tienen ningun voto, por lo que se procede a reemplazar estos valores con esta condicion por el valor promedio de de vote_average
+4. 
