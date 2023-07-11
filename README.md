@@ -15,6 +15,7 @@ Las librerías a utilizar son:
 6. Matplotlib
 7. Numpy
 8. Sickit-Learn
+9. ydata-profiling
 ## Proceso de extracción, transformación y carga (ETL)
 ### Extracción:
 Para el proceso de extracción se utilizaron los archivos llamados credits.csv y movies_dataset.csv
@@ -81,11 +82,19 @@ Se observa que 2847 de películas con vote_average 0 se debe a que no tienen nin
 **Nube de palabras del género**
   ![Nube](img/Nube_genre.png "Nube") <br>
   Se observa que los géneros más comúnes en el data set de películas son drama, comedia y acción, por lo que psoblemente el sistema de recomendación se base en estos 3 géneros
-## Sistema de recomendación
-## Cosine similarity
-**NOTA: ESTE MÉTODO SOLO SE DEJÓ PLANTEADO, DEBIDO A LIMITACONES DE MEMORIA Y DEL SERVIDOR, ERA IMPOSIBLE EJECUTARLO EN RENDER, REVISAR ARCHIVO EDA_SIS, EN LA PARTE FINAL SE ENCUENTRAN LOS DOS SISTEMAS DE RECOMENDACIÓN**
+### Cosine similarity
+**NOTA: ESTE MÉTODO SOLO SE DEJÓ PLANTEADO, DEBIDO A LIMITACONES DE MEMORIA Y DEL SERVIDOR ERA IMPOSIBLE EJECUTARLO EN RENDER, REVISAR ARCHIVO EDA_SIS.ipynb, EN LA PARTE FINAL SE ENCUENTRAN LOS DOS SISTEMAS DE RECOMENDACIÓN**
 Para la elaboración de este método se llevaron a cabo los siguientes pasos:
 1. Codificación de las variables categóricas, es decir, el título y el género
-   - Para la codificación del títutlo 
-
+   - Para la codificación del género se utilizó multilabelbinarizer
+   - Para la codificación del título en la librería NLTK, primero se eliminaron los stopword, luego la tokenización, seguido lematización y finalmente la vectorización (El archivo resultante tiene alrededor de 20000 columnas y 45000 filas, su peso es de alrededor de 5gb)
+2. Por último se aplica cosine similarity a los valores ya codificados y numéricos del dataframe para obtener la matriz de similitud (Este proceso con mi computador demoró alrededor de 5 horas y la matriz final tiene un peso de 40gb)
+   - El funcionamiento se comprobó y si generaba las 5 películas con base en el título, el género, los votos promedios y la popularidad
+### KNN (Vecinos más cercanos)
+Para este sistema se eliminó la codificación de los títulos debido a el peso del dataframe resultante, y solo se tuvo en cuenta el género, el voto promedio y la popularidad, los pasos para su desarrollo fueron:
+1. Usar la códificación del género con multilabelbinarizer
+2. Definir el númro de vecinos k = 5
+3. Aplicar el modelo a los valores del dataframe
+4. crear la función del sistema de recomendación
+## EN EL ARCHIVO EDA_SIS.ipnyb PUEDEN ENCONTRAR EN LA PARTE FINAL EL DESARROLLO DE LOS DOS SISTEMAS 
 
