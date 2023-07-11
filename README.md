@@ -83,6 +83,9 @@ Se observa que 2847 de películas con vote_average 0 se debe a que no tienen nin
   Se observa que los géneros más comúnes en el data set de películas son drama, comedia y acción, por lo que psoblemente el sistema de recomendación se base en estos 3 géneros
 ## Sistema de recomendación
 ## Cosine similarity
-
+**NOTA: ESTE MÉTODO SOLO SE DEJÓ PLANTEADO, DEBIDO A LIMITACONES DE MEMORIA Y DEL SERVIDOR, ERA IMPOSIBLE EJECUTARLO EN RENDER, REVISAR ARCHIVO EDA_SIS, EN LA PARTE FINAL SE ENCUENTRAN LOS DOS SISTEMAS DE RECOMENDACIÓN**
+Para la elaboración de este método se llevaron a cabo los siguientes pasos:
+1. Codificación de las variables categóricas, es decir, el título y el género
+   - Para la codificación del títutlo 
 
 
